@@ -1,4 +1,5 @@
 class CoursesController < ApplicationController
+  before_action :validate_params, only: [:create]
   def index
     @courses = Course.all
   end
@@ -10,9 +11,10 @@ class CoursesController < ApplicationController
   def create
     @course = Course.new(course_params)
     # hit ai, get list of sections & lessons <--
-    # create sections with
-    #  # for each section you'd store the lesson titles
-    # TODO: replace with actual hits to openai and for each section
+
+    ai_client = AiClient.new
+    section_titles, lesson_titles = ai_client.generate_course(course_params[:title], course_params[:level], params[:user_info],
+                                                              params[:additional_info])
 
     1.upto(7) do |i|
       section_name = course_params[:title] + "_section#{i}"
@@ -41,4 +43,8 @@ class CoursesController < ApplicationController
     params.require(:course).permit(:level, :title)
   end
 
+  def validate_params
+    redirect_to courses_path and return unless params[:course][:title].present? && params[:course][:level].present?
+    redirect_to courses_path and return unless params[:user_info].present? && params[:additional_info].present?
+  end
 end
