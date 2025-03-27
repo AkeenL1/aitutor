@@ -1,0 +1,23 @@
+<%=form_with(model: @course) do |course| %>
+  <div id="course_level_buttons">
+    <label>
+      <%= course.radio_button :level, "beginner"%> Beginner
+    </label>
+    <label>
+      <%= course.radio_button :level, "intermediate"%> Intermediate
+    </label>
+    <label>
+      <%= course.radio_button :level, "advanced"%> Advanced
+    </label>
+  </div>
+  <div id="course_title_input">
+    Topic: <%= course.text_field :title %>
+  </div>
+  <div id="user_info_input">
+    User Info: <%=text_area_tag :user_info %>
+  </div>
+  <div id="additional_info_input">
+    Extra Info: <%=text_area_tag :additional_info %>
+  </div>
+  <%=course.submit "Submit" %>
+<% end %>

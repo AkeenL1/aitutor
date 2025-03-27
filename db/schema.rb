@@ -10,30 +10,31 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_03_27_012927) do
+ActiveRecord::Schema[7.2].define(version: 2025_03_27_130731) do
   create_table "courses", force: :cascade do |t|
     t.string "title"
     t.string "level"
-    t.integer "section_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["section_id"], name: "index_courses_on_section_id"
   end
 
   create_table "lessons", force: :cascade do |t|
     t.string "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "title"
+    t.integer "section_id", null: false
+    t.index ["section_id"], name: "index_lessons_on_section_id"
   end
 
   create_table "sections", force: :cascade do |t|
     t.string "title"
-    t.integer "lesson_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["lesson_id"], name: "index_sections_on_lesson_id"
+    t.integer "course_id", null: false
+    t.index ["course_id"], name: "index_sections_on_course_id"
   end
 
-  add_foreign_key "courses", "sections"
-  add_foreign_key "sections", "lessons"
+  add_foreign_key "lessons", "sections"
+  add_foreign_key "sections", "courses"
 end
