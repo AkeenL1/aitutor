@@ -3,10 +3,10 @@
 
 <%= link_to "New Course", new_course_path %>
 
-<hr>
 <%@courses.each do |course| %>
   <div>
     <%= course.title %>
     <%= course.level %>
+    <%= button_to "Delete", course_path(course), method: :delete %>
   </div>
 <% end %>
