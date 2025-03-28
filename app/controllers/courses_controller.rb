@@ -10,18 +10,17 @@ class CoursesController < ApplicationController
 
   def create
     @course = Course.new(course_params)
-    # hit ai, get list of sections & lessons <--
 
     ai_client = AiClient.new
-    section_titles, lesson_titles = ai_client.generate_course(course_params[:title], course_params[:level], params[:user_info],
+    sections_and_lessons = ai_client.generate_course(course_params[:title], course_params[:level], params[:user_info],
                                                               params[:additional_info])
 
-    1.upto(7) do |i|
-      section_name = course_params[:title] + "_section#{i}"
-      section = @course.sections.build(title: section_name)
-      1.upto(4) do |j|
-        lesson_name = section_name + "_lesson#{i}"
-        section.lessons.build(title: lesson_name, content: "blah")
+    sections_and_lessons.each do |section, lessons|
+      section_name = section.to_s
+      section = @course.sections.build(title:section_name)
+      lessons.each do |lesson|
+        lesson_name = lesson.to_s
+        section.lessons.build(title:lesson_name, content: "blah")
       end
     end
 
@@ -32,6 +31,11 @@ class CoursesController < ApplicationController
     end
   end
 
+  def show
+    @course = Course.find(params[:id])
+    @sections = @course.sections
+  end
+  
   def destroy
     if Course.find(params[:id]).destroy
       redirect_to courses_path

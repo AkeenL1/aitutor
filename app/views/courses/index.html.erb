@@ -4,9 +4,12 @@
 <%= link_to "New Course", new_course_path %>
 
 <%@courses.each do |course| %>
+  <hr>
   <div>
     <%= course.title %>
     <%= course.level %>
     <%= button_to "Delete", course_path(course), method: :delete %>
+    <%= button_to "Show", course_path(course), method: :get %>
   </div>
+  <hr>
 <% end %>

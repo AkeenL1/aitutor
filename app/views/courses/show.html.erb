@@ -1,0 +1,12 @@
+<h2><%= @course.title %></h2>
+<hr>
+<div>
+  <%@sections.each do |section| %>
+    <h3><%=section.title %></h3>
+    <%section.lessons.each do |lesson| %>
+      <%=lesson.title %>
+      <br>
+    <% end %>
+    <hr>
+  <% end %>
+</div>
