@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
   resources :courses
+  resources :sections
+  resources :lessons
   root "courses#index"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

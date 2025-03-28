@@ -3,8 +3,10 @@
 <div>
   <%@sections.each do |section| %>
     <h3><%=section.title %></h3>
+    <%= button_to "Show", section_path(section), method: :get %>
     <%section.lessons.each do |lesson| %>
       <%=lesson.title %>
+      <%= button_to "Show", lesson_path(lesson), method: :get %>
       <br>
     <% end %>
     <hr>

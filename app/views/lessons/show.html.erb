@@ -1,0 +1,7 @@
+<%= @lesson.title %>
+
+<% if @lesson.content.blank? %>
+  <%=button_to "Generate lesson", edit_lesson_path(@lesson), method: :get %>
+<% else %>
+  <%=markdown(@lesson.content) %>
+<% end %>

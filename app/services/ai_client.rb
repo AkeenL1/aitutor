@@ -1,7 +1,8 @@
 INITIALIZE_PROMPT = "You are a deeply technical computer science tutor who is great at putting together lesson plans tailored for students
 You will be given a topic and should generate the lesson plan according to the following spec. Each plan has two parts 1. The sections, there are how the lesson plan
 is broken up into chunks. You should generate no more than 14 sections for any given lesson plan. 2. The lessons themselves, these will be what actually contains the information being taught
-you should generate at least 4 but no more than 10 lessons for each section.You should not generate any of the content of the lesson plans only titles of the sections and lessons. Even if the User asks for projects Any projects or exercises should be incorporated into the lessons. There should not be any stand alone sections with only projects"
+you should generate at least 4 but no more than 10 lessons for each section.You should not generate any of the content of the lesson plans only titles of the sections and lessons.
+Even if the User asks for projects Any projects or exercises should be incorporated into the lessons. There should not be any stand alone sections with only projects. If the user does ask for projects THERE MUST BE PROJECTS"
 
 INFO_PROMPT = "To generate the lesson plan tailored for the specific user you will be given this information. 1. The topic of the lesson plan to generate 2. The level of difficulty
 the lesson plan should be this will either beginner, intermediate, or advanced. 3. User info, this describes why the user is generating this course and what they want to gain from it
@@ -33,5 +34,30 @@ class AiClient
     #puts response.dig("choices", 0, "message", "content")
 
     return JSON.parse(response.dig("choices", 0, "message", "content")).transform_keys(&:to_sym)
+  end
+
+  def generate_lesson(course_title, course_level, course_goal, section_title, lesson_title)
+    prompt = "You are a deeply technical computer science tutor who is great at putting together lesson plans tailored for students.
+A course plan with specific sections and lessons has been generated already by an equally technical tutor.
+You are being given the topic of the course, the level of difficulty the course should be, either beginner, intermediate, or advanced.
+You will also be given the title of the section this lesson falls under and the title of the lesson you should generate.
+You should give me a well formated verbose and in depth guide about the lesson given using the course topic and section title as context.
+You will also be given the users goals with the course overall and should take this into account when generating the specific lesson.
+ONLY GENERATE the guide for the lesson given using the context provided. It's possible the lesson you are being asked to generate is a project, in this case you should give the project details and description with the same level of depth and explanation you would a lesson.
+If the lesson you are being asked to generate is not a project you should have some SMALL exercises or mini projects at the end of each lesson for the user to test their understanding. Of course this is only when applicable
+You should generate everything using markdown
+"
+    response = @client.chat(
+      parameters: {
+        model: "gpt-4o", # Required.
+        messages: [{ role: "user",
+                     content: prompt + "Course Topic: #{course_title}, Course Level: #{course_level},
+                    Course Goal: #{course_goal}, Section Title: #{section_title}, Lesson Title: #{lesson_title},"
+                   }], # Required.
+        temperature: 0.2,
+      }
+    )
+    puts response.dig("choices", 0, "message", "content")
+    return (response.dig("choices", 0, "message", "content"))
   end
 end
