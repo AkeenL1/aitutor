@@ -1,4 +1,4 @@
-<h2><%= @course.title %></h2>
+<h2><%= @course.title + " - " + @course.level.capitalize%></h2>
 <hr>
 <div>
   <%@sections.each do |section| %>
