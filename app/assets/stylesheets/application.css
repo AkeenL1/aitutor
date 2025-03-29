@@ -13,3 +13,11 @@
  *= require_tree .
  *= require_self
  */
+
+pre.highlight {
+    background-color: #2f2e2e;
+    color: #fff;
+    padding: 1em;
+    border-radius: 4px;
+    overflow-x: auto;
+}

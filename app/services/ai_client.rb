@@ -4,7 +4,7 @@ When given a course topic, generate a lesson plan with two parts:
 1. Sections: Divide the course into up to 14 sections.
 2. Lessons: For each section, list 4 to 10 lesson titles.
 Only output the titles (do not include lesson content).
-If projects or exercises are requested, integrate them within the lessons; do not create standalone sections.
+If projects or exercises are requested, integrate them within the lessons and at the end of each section there should be some project or lessons to test the users knowledge on the topics discussed.
 """
 
 INFO_PROMPT = """
@@ -40,16 +40,15 @@ class AiClient
   end
 
   def generate_course(title, level, user_info, additional_info)
-    retries = 5
+    retries = 2
     begin
       course_prompt = "1. Topic: #{title}. 2. Level: #{level}. 3. User Information: #{user_info}. 4. Additional Info: #{additional_info}"
       response = @client.chat(
         parameters: {
-          model: "gpt-4o", # Required.
+          model: "o3-mini", # Required.
           messages: [{ role: "user",
                        content: INITIALIZE_PROMPT + INFO_PROMPT + FORMAT_PROMPT + "Here is the information to build the lesson plan" + course_prompt
-                     }], # Required.
-          temperature: 0.2,
+                     }]
         }
       )
       #puts response
@@ -61,6 +60,7 @@ class AiClient
         sleep 1  # wait 1 second before retrying
         retry
       else
+        pp e.message
         raise e
       end
     end
@@ -86,12 +86,11 @@ ONLY generate the guide for the given lesson using the provided context.
 """
     response = @client.chat(
       parameters: {
-        model: "gpt-4o", # Required.
+        model: "o3-mini", # Required.
         messages: [{ role: "user",
                      content: prompt + "Course Topic: #{course_title}, Course Level: #{course_level},
                     Course Goal: #{course_goal}, Section Title: #{section_title}, Lesson Title: #{lesson_title},"
-                   }], # Required.
-        temperature: 0.2,
+                   }]
       }
     )
     puts response.dig("choices", 0, "message", "content")
