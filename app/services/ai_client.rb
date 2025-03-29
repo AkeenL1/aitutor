@@ -25,7 +25,7 @@ Use all these inputs to create a lesson plan that aligns with the user’s needs
 
 FORMAT_PROMPT = """
 Return a hash where each key is a section title, and its value is an array of lesson titles.
-Limit the output to exactly 7 sections, with each section containing 4 to 10 lesson titles.
+Limit the output to no more than 14 sections but you can provide less if all the necessary information can be fit in less, with each section containing 4 to 10 lesson titles.
 Output only the hash; no extra formatting or tagging is allowed.
 """
 
